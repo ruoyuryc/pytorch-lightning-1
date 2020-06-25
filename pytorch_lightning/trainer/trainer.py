@@ -1057,10 +1057,12 @@ class Trainer(
         self.disable_validation = not (self.is_overridden('validation_step') and self.limit_val_batches > 0) \
             and not self.fast_dev_run
 
+        if not self.disable_validation:
+            self.reset_val_dataloader(ref_model)
+
         # run tiny validation (if validation defined)
         # to make sure program won't crash during val
         if not self.disable_validation and self.num_sanity_val_steps > 0:
-            self.reset_val_dataloader(ref_model)
 
             # hook and callback
             ref_model.on_sanity_check_start()
